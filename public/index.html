@@ -27,6 +27,7 @@
         <th>Make</th>
         <th>Year</th>
         <th>Color</th>
+        <th>Buttons</th>
       </tr>
     </thead>
     <tbody id="carsTableBody"></tbody>
@@ -51,12 +52,16 @@
           <td>${car.make}</td>
           <td>${car.year}</td>
           <td>${car.color}</td>
+          <td> 
+            <button onclick="deleteCar(${car.id})">Delete</button>
+            <button onclick="updateCar(${car.id})">Update</button>
+          </td>
         `;
 
         tableBody.appendChild(row);
       });
     }
-/*
+
     form.addEventListener("submit", async event => {
       event.preventDefault();
 
@@ -78,7 +83,36 @@
       form.reset();
       loadCars();
     });
-*/
+
+    async function deleteCar(id) { 
+      await fetch(`/api/cars/${id}`, {
+      method: "DELETE"
+    });
+
+window.updateCar = async function(id) {
+
+  const brand = prompt("Enter new brand: ");
+  const make = prompt("Enter new make: ");
+  const year = prompt("Enter new year: ");
+  const color = prompt("Enter new color: ");
+
+  const updatedCar = {brand, make, year, color};
+
+  await fetch(`/api/cars/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(updatedCar)
+  });
+
+  loadCars();
+}
+
+
+    loadCars();
+}
+
     loadCars();
   </script>
 </body>
